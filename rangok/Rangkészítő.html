@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<!-- saved from url=(0031)https://amatadev.eu/rangprefix/ -->
+<html lang="hu"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patriick mc rangkészítő</title>
+    <link rel="icon" type="image/x-icon" href="./Rangkészítő_files/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <!-- CSS only -->
+<link href="./Rangkészítő_files/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+<style>
+    #myCanvas {
+      transform: scale(10);
+    }
+    body {
+    background-color: #1e1e1e;
+    color: white;
+    font-family: 'Press Start 2P', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    flex-grow: 1;
+}
+
+.input-row {
+    display: flex;
+    flex-wrap: wrap; /* Engedélyezi a tördelést */
+    justify-content: center; /* Középre igazítja a mezőket */
+    gap: 20px; /* Távolság a mezők között */
+    margin-bottom: 20px;
+}
+
+.mb-3 { /* Bootstrap margó osztály felülírása */
+    margin-bottom: 0 !important; /* Fontos, hogy felülírjuk a Bootstrap-et */
+    display: flex; /* Flexbox elrendezés */
+    flex-direction: column; /* Függőleges elrendezés a label és input számára */
+}
+
+.form-label {
+    margin-bottom: 5px; /* Távolság a label és az input között */
+}
+
+input[type="text"], input[type="color"] {
+    background-color: #2e2e2e;
+    border: 2px solid #0055ff;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    width: 200px; /* Fix szélesség az inputoknak */
+    box-sizing: border-box;
+}
+
+.color-label {
+    margin-right: 5px;
+}
+
+button {
+    background-color: #0055ff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    background-image: linear-gradient(to bottom, #0055ff, #0044cc);
+}
+
+button:hover {
+    background-color: #0044cc;
+    transform: translateY(-2px);
+}
+
+canvas {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    image-rendering: pixelated;
+    transform: scale(2);
+    margin-top: 20px;
+    border: 2px solid #0055ff;
+    background-color: #333;
+}
+
+/* ... (A többi stílus ugyanaz, mint az előző válaszban) */
+    
+    
+</style></head>
+
+<body style="padding: 20px; background-color: rgb(34, 34, 34); color: rgb(238, 238, 238);">
+  <div class="container text-center">
+      <div style="padding-bottom: 50px;">
+        <img src="./Rangkészítő_files/favicon.png" alt="rivals ikon" height="150px">
+        <h3>Patriick Rangkészítő</h3>
+      </div>
+    <div class="row">
+      <div class="mb-3 col-md-3">
+        <label for="e1" class="form-label">Rang neve</label>
+        <input type="text" class="form-control" id="e1" onkeyup="updateCanvas();" value="" placeholder="Rang neve">
+      </div>
+      <div class="mb-3 col-md-3">
+        <label for="e1" class="form-label">Árnyékszín</label>
+        <input type="text" class="form-control" id="e2" onkeyup="updateCanvas(); updateColorB();" value="#00AAAA">
+        <input type="color" class="form-control" id="e22" oninput="updateColorU();" value="#00AAAA">
+      </div>
+      <div class="mb-3 col-md-3">
+        <label for="e1" class="form-label">Háttér: A</label>
+        <input type="text" class="form-control" id="e3" onkeyup="updateCanvas(); updateColorB();" value="#00FFFF">
+        <input type="color" class="form-control" id="e32" oninput="updateColorU();" value="#00FFFF">
+      </div>
+      <div class="mb-3 col-md-3">
+        <label for="e1" class="form-label">Háttér: B</label>
+        <input type="text" class="form-control" id="e4" onkeyup="updateCanvas(); updateColorB();" value="#00FFAA">
+        <input type="color" class="form-control" id="e42" oninput="updateColorU();" value="#00FFAA">
+      </div>
+
+    </div>
+  <div class="row">
+    <div class="col-md-5">
+    </div>
+    <div class="col-md-2 text-light" id="e5"><button class="btn btn-primary" style="width: 100%; height: 100%;" onclick="darkMode(0);">Light Mode</button></div>
+    <div class="col-md-5">
+    </div>
+    <b class="pt-2">(Letöltéshez jobb klikk mentés a képre)</b><br>
+  </div>
+  </div>
+  <div class="row">
+    <div>
+      <canvas id="myCanvas" width="10" height="7" style="margin-top: 80px;"></canvas>
+    </div>
+  </div>
+
+
+<script src="./Rangkészítő_files/bootstrap.bundle.min.js.letöltés" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+<script>
+    base_imagea = new Image();
+    base_imageb = new Image();
+    base_imagec = new Image();
+    base_imaged = new Image();
+    base_imagee = new Image();
+    base_imagef = new Image();
+    base_imageg = new Image();
+    base_imageh = new Image();
+    base_imagei = new Image();
+    base_imagej = new Image();
+    base_imagek = new Image();
+    base_imagel = new Image();
+    base_imagem = new Image();
+    base_imagen = new Image();
+    base_imageo = new Image();
+    base_imagep = new Image();
+    base_imageq = new Image();
+    base_imager = new Image();
+    base_images = new Image();
+    base_imaget = new Image();
+    base_imageu = new Image();
+    base_imagev = new Image();
+    base_imagew = new Image();
+    base_imagex = new Image();
+    base_imagey = new Image();
+    base_imagez = new Image();
+    base_image$ = new Image();
+    base_imageplus = new Image();
+    base_imagespace = new Image();
+    base_imageá = new Image();
+    base_imagebper = new Image();
+    base_imagejper = new Image();
+    base_imageé = new Image();
+    base_imageí = new Image();
+    base_imageú = new Image();
+    base_imageü = new Image();
+    base_imageű = new Image();
+    base_imageó = new Image();
+    base_imageö = new Image();
+    base_imageő = new Image();
+    base_imagefelkialto = new Image();
+    base_imagekerdo = new Image();
+    base_imagedot = new Image();
+    base_imagevesszo = new Image();
+    base_image0 = new Image();
+    base_image1 = new Image();
+    base_image2 = new Image();
+    base_image3 = new Image();
+    base_image4 = new Image();
+    base_image5 = new Image();
+    base_image6 = new Image();
+    base_image7 = new Image();
+    base_image8 = new Image();
+    base_image9 = new Image();
+    base_imagedash = new Image();
+    base_imagehashtag = new Image();
+    base_image_ = new Image();
+    base_imagekettospont = new Image();
+    base_imagecsillag = new Image();
+    base_imageegyenlo = new Image();
+    base_imageszazalek = new Image();
+    base_imagenagyobb = new Image();
+    base_imagekisebb = new Image();
+    base_imagelbal = new Image();
+    base_imageljob = new Image();
+    base_imagesbal = new Image();
+    base_imagesjob = new Image();
+    imageLoad();
+    function imageLoad() {
+      base_imagea.src = "betuk/a.png";
+      base_imageb.src = "betuk/b.png";
+      base_imagec.src = "betuk/c.png";
+      base_imaged.src = "betuk/d.png";
+      base_imagee.src = "betuk/e.png";
+      base_imagef.src = "betuk/f.png";
+      base_imageg.src = "betuk/g.png";
+      base_imageh.src = "betuk/h.png";
+      base_imagei.src = "betuk/i.png";
+      base_imagej.src = "betuk/j.png";
+      base_imagek.src = "betuk/k.png";
+      base_imagel.src = "betuk/l.png";
+      base_imagem.src = "betuk/m.png";
+      base_imagen.src = "betuk/n.png";
+      base_imageo.src = "betuk/o.png";
+      base_imagep.src = "betuk/p.png";
+      base_imageq.src = "betuk/q.png";
+      base_imager.src = "betuk/r.png";
+      base_images.src = "betuk/s.png";
+      base_imaget.src = "betuk/t.png";
+      base_imageu.src = "betuk/u.png";
+      base_imagev.src = "betuk/v.png";
+      base_imagew.src = "betuk/w.png";
+      base_imagex.src = "betuk/x.png";
+      base_imagey.src = "betuk/y.png";
+      base_imagez.src = "betuk/z.png";
+      base_image$.src = "betuk/$.png";
+      base_imageplus.src = "betuk/+.png";
+      base_imagespace.src = "betuk/space.png";
+      base_imageá.src = "betuk/á.png";
+      base_imagebper.src = "betuk/bper.png";
+      base_imagejper.src = "betuk/jper.png";
+      base_imageé.src = "betuk/é.png";
+      base_imageí.src = "betuk/í.png";
+      base_imageú.src = "betuk/ú.png";
+      base_imageü.src = "betuk/ü.png";
+      base_imageű.src = "betuk/ű.png";
+      base_imageó.src = "betuk/ó.png";
+      base_imageö.src = "betuk/ö.png";
+      base_imageő.src = "betuk/ő.png";
+      base_imagefelkialto.src = "betuk/felkialto.png";
+      base_imagekerdo.src = "betuk/kerdo.png";
+      base_imagedot.src = "betuk/dot.png";
+      base_imagevesszo.src = "betuk/vesszo.png";
+      base_image0.src = "betuk/0.png";
+      base_image1.src = "betuk/1.png";
+      base_image2.src = "betuk/2.png";
+      base_image3.src = "betuk/3.png";
+      base_image4.src = "betuk/4.png";
+      base_image5.src = "betuk/5.png";
+      base_image6.src = "betuk/6.png";
+      base_image7.src = "betuk/7.png";
+      base_image8.src = "betuk/8.png";
+      base_image9.src = "betuk/9.png";
+      base_imagedash.src = "betuk/-.png";
+      base_imagehashtag.src = "betuk/hashtag.png";
+      base_image_.src = "betuk/_.png";
+      base_imagekettospont.src = "betuk/kettospont.png";
+      base_imagecsillag.src = "betuk/csillag.png";
+      base_imageegyenlo.src = "betuk/=.png";
+      base_imageszazalek.src = "betuk/%.png";
+      base_imagenagyobb.src = "betuk/nagyobb.png";
+      base_imagekisebb.src = "betuk/kisebb.png";
+      base_imagelbal.src = "betuk/[.png";
+      base_imageljob.src = "betuk/].png";
+      base_imagesbal.src = "betuk/(.png";
+      base_imagesjob.src = "betuk/).png";
+      console.log("Betűk betöltve..")
+    }
+    function updateCanvas() {
+        var ertek = document.getElementById("e1").value.toLowerCase().split("");
+        var hh = 2;
+        var height = 7;
+        for (i = 0; i < ertek.length; i++) {
+          if (ertek[i] == "+") {ertek[i] = "plus"};
+          if (ertek[i] == " ") {ertek[i] = "space"};
+          if (ertek[i] == "\\") {ertek[i] = "bper"};
+          if (ertek[i] == "/") {ertek[i] = "jper"};
+          if (ertek[i] == "!") {ertek[i] = "felkialto"};
+          if (ertek[i] == "?") {ertek[i] = "kerdo"};
+          if (ertek[i] == ".") {ertek[i] = "dot"};
+          if (ertek[i] == ",") {ertek[i] = "vesszo"};
+          if (ertek[i] == "-") {ertek[i] = "dash"};
+          if (ertek[i] == "#") {ertek[i] = "hashtag"};
+          if (ertek[i] == ":") {ertek[i] = "kettospont"};
+          if (ertek[i] == "=") {ertek[i] = "egyenlo"};
+          if (ertek[i] == "*") {ertek[i] = "csillag"};
+          if (ertek[i] == "%") {ertek[i] = "szazalek"};
+          if (ertek[i] == ">") {ertek[i] = "nagyobb"};
+          if (ertek[i] == "<") {ertek[i] = "kisebb"};
+          if (ertek[i] == "[") {ertek[i] = "lbal"};
+          if (ertek[i] == "]") {ertek[i] = "ljob"};
+          if (ertek[i] == "(") {ertek[i] = "sbal"};
+          if (ertek[i] == ")") {ertek[i] = "sjob"};
+          hh += window["base_image"+ertek[i]].width;
+          if (height < window["base_image"+ertek[i]].height) { height = window["base_image"+ertek[i]].height; }
+        }
+        document.getElementById("myCanvas").width = hh;
+        document.getElementById("myCanvas").height = height;
+        var hely = 1;
+        var c = document.getElementById("myCanvas");
+        var ctx = c.getContext("2d");
+        var grd = ctx.createLinearGradient(0,0,c.width, c.height);
+        grd.addColorStop(0,document.getElementById("e3").value);
+        grd.addColorStop(1,document.getElementById("e4").value);
+        
+        // Fill with gradient
+        ctx.fillStyle = grd;
+        if (height == 7) { ctx.fillRect(0, 0, c.width, c.height); } else { ctx.fillRect(0, 2, c.width, c.height); }
+        for (i = 0; i < ertek.length; i++) {
+          if (ertek[i] == "+") {ertek[i] = "plus"};
+          if (ertek[i] == " ") {ertek[i] = "space"};
+          if (ertek[i] == "\\") {ertek[i] = "bper"};
+          if (ertek[i] == "/") {ertek[i] = "jper"};
+          if (ertek[i] == "!") {ertek[i] = "felkialto"};
+          if (ertek[i] == "?") {ertek[i] = "kerdo"};
+          if (ertek[i] == ".") {ertek[i] = "dot"};
+          if (ertek[i] == ",") {ertek[i] = "vesszo"};
+          if (ertek[i] == "-") {ertek[i] = "dash"};
+          if (ertek[i] == "#") {ertek[i] = "hastag"};
+          if (ertek[i] == ":") {ertek[i] = "kettospont"};
+          if (ertek[i] == "=") {ertek[i] = "egyenlo"};
+          if (ertek[i] == "*") {ertek[i] = "csillag"};
+          if (ertek[i] == "%") {ertek[i] = "szazalek"};
+          if (ertek[i] == ">") {ertek[i] = "nagyobb"};
+          if (ertek[i] == "<") {ertek[i] = "kisebb"};
+          if (ertek[i] == "[") {ertek[i] = "lbal"};
+          if (ertek[i] == "]") {ertek[i] = "ljob"};
+          if (ertek[i] == "(") {ertek[i] = "sbal"};
+          if (ertek[i] == ")") {ertek[i] = "sjob"};
+          dynamicCanvas = document.createElement("canvas");
+          dynamicContext = dynamicCanvas.getContext("2d");
+          dynamicCanvas.height=height;
+          dynamicCanvas.width="5";
+          // draw color
+          dynamicContext.fillStyle = document.getElementById("e2").value;
+          if (height == 7 || window["base_image"+ertek[i]].height == 7) {
+            dynamicContext.fillRect(0, 0, dynamicCanvas.width, dynamicCanvas.height);
+          } else {
+            dynamicContext.fillRect(0, 2, dynamicCanvas.width, dynamicCanvas.height);
+          }
+          
+          
+          // set composite mode
+          dynamicContext.globalCompositeOperation = "destination-in";
+          
+          // draw image
+          console.log(window["base_image"+ertek[i]])
+          dynamicContext.drawImage(window["base_image"+ertek[i]], 0, 0);
+          
+          // draw image
+          ctx.globalCompositeOperation = "source-over";
+          if (height == 7 || window["base_image"+ertek[i]].height == 9) {
+            ctx.drawImage(dynamicCanvas, hely + 1, 0);
+          } else {
+            ctx.drawImage(dynamicCanvas, hely + 1, 2);
+          }
+          ctx.globalCompositeOperation = "source-over";
+          if (height == 7 || window["base_image"+ertek[i]].height == 9) {
+            ctx.drawImage(window["base_image"+ertek[i]], hely, 0);
+          } else {
+            ctx.drawImage(window["base_image"+ertek[i]], hely, 2);
+          }
+          
+          hely += window["base_image"+ertek[i]].width;
+          var element = dynamicCanvas;
+          element.remove();
+        }
+        
+    }
+    function updateColorB() {
+      document.getElementById("e22").value = document.getElementById("e2").value
+      document.getElementById("e32").value = document.getElementById("e3").value
+      document.getElementById("e42").value = document.getElementById("e4").value
+    }
+    function updateColorU() {
+      document.getElementById("e2").value = document.getElementById("e22").value
+      document.getElementById("e3").value = document.getElementById("e32").value
+      document.getElementById("e4").value = document.getElementById("e42").value
+      updateCanvas(); 
+    }
+    function darkMode(m) {
+    if (m == 1) {
+        document.body.classList.remove('light-mode');
+        document.getElementById("e5").innerHTML = `<button class="btn btn-primary" style="width: 100%; height: 100%;" onclick="darkMode(0);">Light Mode</button>`;
+    } else {
+        document.body.classList.add('light-mode');
+        document.getElementById("e5").innerHTML = `<button class="btn btn-primary" style="width: 100%; height: 100%;" onclick="darkMode(1);">Dark Mode</button>`;
+    }
+      if (m == 1) {
+        document.body.style.backgroundColor = "#222222";
+        document.body.style.color = "#EEEEEE";
+      } else {
+        document.body.style.backgroundColor = "#EEEEEE";
+        document.body.style.color = "#000000";
+      }
+      document.getElementById("e5").innerHTML = dm;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.body.style.backgroundColor = "#222222";
+      document.body.style.color = "#EEEEEE";
+      document.getElementById("e5").innerHTML = `<button class="btn btn-primary" style="width: 100%; height: 100%;" onclick="darkMode(0);">Light Mode</button>`;
+    }
+</script>
+</body><!-- JavaScript Bundle with Popper --></html>
